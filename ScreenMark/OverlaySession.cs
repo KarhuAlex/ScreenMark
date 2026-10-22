@@ -1,13 +1,14 @@
-using System.Windows.Forms;
+using System.Windows.Input;
 using ScreenMark.Drawing;
 using ScreenMark.UI;
+using Screen = System.Windows.Forms.Screen;
 
 namespace ScreenMark;
 
 internal sealed class OverlaySession : IDisposable
 {
     private readonly List<OverlayWindow> overlays = [];
-    private readonly Stack<(OverlayWindow Overlay, Annotation Annotation)> history = new();
+    private readonly UndoHistory<(OverlayWindow Overlay, Annotation Annotation)> history = new();
     private ToolbarWindow? toolbar;
 
     public bool IsActive => toolbar is not null;
@@ -36,6 +37,7 @@ internal sealed class OverlaySession : IDisposable
         {
             var overlay = new OverlayWindow(state, screen.Bounds);
             overlay.AnnotationCompleted += OnAnnotationCompleted;
+            overlay.PreviewKeyDown += OnPreviewKeyDown;
             overlay.Show();
             overlays.Add(overlay);
 
@@ -48,9 +50,12 @@ internal sealed class OverlaySession : IDisposable
 
         toolbar = new ToolbarWindow(state, primaryBounds) { Owner = primaryOverlay };
         toolbar.UndoRequested += (_, _) => Undo();
+        toolbar.RedoRequested += (_, _) => Redo();
         toolbar.ClearRequested += (_, _) => Clear();
         toolbar.CloseRequested += (_, _) => Dismiss();
+        toolbar.PreviewKeyDown += OnPreviewKeyDown;
         toolbar.Show();
+        toolbar.Activate();
     }
 
     private void Dismiss()
@@ -67,14 +72,42 @@ internal sealed class OverlaySession : IDisposable
         history.Clear();
     }
 
+    private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        switch (e.Key, Keyboard.Modifiers)
+        {
+            case (Key.Escape, ModifierKeys.None):
+                Dismiss();
+                break;
+            case (Key.Z, ModifierKeys.Control):
+                Undo();
+                break;
+            case (Key.Y, ModifierKeys.Control):
+                Redo();
+                break;
+            default:
+                return;
+        }
+
+        e.Handled = true;
+    }
+
     private void OnAnnotationCompleted(object? sender, Annotation annotation) =>
-        history.Push(((OverlayWindow)sender!, annotation));
+        history.Record(((OverlayWindow)sender!, annotation));
 
     private void Undo()
     {
-        if (history.TryPop(out var entry))
+        if (history.TryUndo(out var entry))
         {
             entry.Overlay.Remove(entry.Annotation);
+        }
+    }
+
+    private void Redo()
+    {
+        if (history.TryRedo(out var entry))
+        {
+            entry.Overlay.Add(entry.Annotation);
         }
     }
 

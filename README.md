@@ -7,7 +7,7 @@ ScreenMark is a small Windows utility for drawing temporary annotations over the
 - Global `Ctrl+0` hotkey toggles a transparent drawing overlay
 - Rectangle, ellipse, arrow and freehand tools
 - Red, green and blue stroke colors
-- Undo and clear
+- Undo, redo and clear
 - The mouse wheel scrolls the window under the cursor without closing the overlay
 - One overlay per monitor, including monitors at negative coordinates and with different DPI scaling
 - Annotations stay on screen while a screenshot tool runs and are discarded when the overlay closes
@@ -43,7 +43,9 @@ The toolbar can be moved by dragging its background if it covers the area you wa
 |---|---|
 | `Ctrl+0` | Show or hide the overlay |
 | Mouse wheel | Scroll the window under the cursor |
-| `Esc` | Cancel the annotation being drawn |
+| `Esc` | Cancel the annotation being drawn, or close the overlay |
+| `Ctrl+Z` | Undo the last annotation |
+| `Ctrl+Y` | Redo the last undone annotation |
 
 ## Limitations
 

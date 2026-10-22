@@ -26,6 +26,8 @@ internal sealed partial class ToolbarWindow : Window
 
     public event EventHandler? UndoRequested;
 
+    public event EventHandler? RedoRequested;
+
     public event EventHandler? ClearRequested;
 
     public event EventHandler? CloseRequested;
@@ -56,6 +58,8 @@ internal sealed partial class ToolbarWindow : Window
     private void OnColorChecked(object sender, RoutedEventArgs e) => state.Color = (Color)((RadioButton)e.OriginalSource).Tag;
 
     private void OnUndoClick(object sender, RoutedEventArgs e) => UndoRequested?.Invoke(this, EventArgs.Empty);
+
+    private void OnRedoClick(object sender, RoutedEventArgs e) => RedoRequested?.Invoke(this, EventArgs.Empty);
 
     private void OnClearClick(object sender, RoutedEventArgs e) => ClearRequested?.Invoke(this, EventArgs.Empty);
 

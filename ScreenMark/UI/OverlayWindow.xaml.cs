@@ -22,6 +22,8 @@ internal sealed partial class OverlayWindow : Window
 
     public event EventHandler<Annotation>? AnnotationCompleted;
 
+    public void Add(Annotation annotation) => Surface.Children.Add(annotation.Visual);
+
     public void Remove(Annotation annotation) => Surface.Children.Remove(annotation.Visual);
 
     public void Clear()
@@ -52,7 +54,7 @@ internal sealed partial class OverlayWindow : Window
     {
         var origin = e.GetPosition(Surface);
         current = Annotation.Begin(state.Tool, origin, state.Color, DrawingState.StrokeThickness);
-        Surface.Children.Add(current.Visual);
+        Add(current);
         Surface.CaptureMouse();
     }
 

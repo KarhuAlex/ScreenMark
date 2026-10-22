@@ -148,8 +148,11 @@
 
             <Rectangle Style="{StaticResource Separator}" />
 
-            <Button Style="{StaticResource ToolbarButton}" ToolTip="Undo" Click="OnUndoClick">
+            <Button Style="{StaticResource ToolbarButton}" ToolTip="Undo (Ctrl+Z)" Click="OnUndoClick">
                 <Path Style="{StaticResource IconPath}" Data="M6,3.5 L3,6.5 L6,9.5 M3,6.5 H9.5 A3.5,3.5 0 0 1 9.5,13.5 H6" />
+            </Button>
+            <Button Style="{StaticResource ToolbarButton}" ToolTip="Redo (Ctrl+Y)" Click="OnRedoClick">
+                <Path Style="{StaticResource IconPath}" Data="M10,3.5 L13,6.5 L10,9.5 M13,6.5 H6.5 A3.5,3.5 0 0 0 6.5,13.5 H10" />
             </Button>
             <Button Style="{StaticResource ToolbarButton}" ToolTip="Clear all" Click="OnClearClick">
                 <Path Style="{StaticResource IconPath}" Data="M2.5,4.5 H13.5 M6,4.5 V2.5 H10 V4.5 M4,4.5 L4.8,13.5 H11.2 L12,4.5 M6.8,7 V11 M9.2,7 V11" />
@@ -157,7 +160,7 @@
 
             <Rectangle Style="{StaticResource Separator}" />
 
-            <Button Style="{StaticResource CloseButton}" ToolTip="Close (Ctrl+0)" Click="OnCloseClick">
+            <Button Style="{StaticResource CloseButton}" ToolTip="Close (Esc)" Click="OnCloseClick">
                 <Path Style="{StaticResource IconPath}" Data="M3.5,3.5 L12.5,12.5 M12.5,3.5 L3.5,12.5" />
             </Button>
         </StackPanel>
