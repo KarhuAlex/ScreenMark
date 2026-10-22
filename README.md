@@ -50,3 +50,7 @@ The toolbar can be moved by dragging its background if it covers the area you wa
 - Shapes are outlines only. There is no text, fill, eraser, saving or loading.
 - The toolbar is part of the screen, so it appears in a capture that includes it.
 - Monitors with different DPI scaling are handled in code but have not been tested on such a setup.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
