@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ScreenMark.Tests/ScreenMark.Tests.csproj" />
+  <Project Path="ScreenMark/ScreenMark.csproj" />
+</Solution>

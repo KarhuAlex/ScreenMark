@@ -1,0 +1,22 @@
+<Window x:Class="ScreenMark.UI.OverlayWindow"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ScreenMark Overlay"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Cursor="Cross"
+        SourceInitialized="OnSourceInitialized"
+        PreviewKeyDown="OnPreviewKeyDown">
+    <!-- The near-invisible fill keeps the canvas hit-testable; fully transparent pixels pass clicks through. -->
+    <Canvas x:Name="Surface"
+            Background="#01000000"
+            MouseLeftButtonDown="OnMouseLeftButtonDown"
+            MouseMove="OnMouseMove"
+            MouseLeftButtonUp="OnMouseLeftButtonUp"
+            LostMouseCapture="OnLostMouseCapture" />
+</Window>
