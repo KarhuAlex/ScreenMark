@@ -11,7 +11,8 @@
         Topmost="True"
         Cursor="Cross"
         SourceInitialized="OnSourceInitialized"
-        PreviewKeyDown="OnPreviewKeyDown">
+        PreviewKeyDown="OnPreviewKeyDown"
+        PreviewMouseWheel="OnPreviewMouseWheel">
     <!-- The near-invisible fill keeps the canvas hit-testable; fully transparent pixels pass clicks through. -->
     <Canvas x:Name="Surface"
             Background="#01000000"

@@ -9,12 +9,14 @@ internal sealed partial class OverlayWindow : Window
 {
     private readonly DrawingState state;
     private readonly System.Drawing.Rectangle screenBounds;
+    private readonly WheelForwarder wheelForwarder;
     private Annotation? current;
 
     public OverlayWindow(DrawingState state, System.Drawing.Rectangle screenBounds)
     {
         this.state = state;
         this.screenBounds = screenBounds;
+        wheelForwarder = new WheelForwarder(this);
         InitializeComponent();
     }
 
@@ -32,6 +34,18 @@ internal sealed partial class OverlayWindow : Window
     {
         WindowPlacement.HideFromTaskSwitcher(this);
         WindowPlacement.SetPixelBounds(this, screenBounds);
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        wheelForwarder.Stop();
+        base.OnClosed(e);
+    }
+
+    private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        wheelForwarder.Forward(e.Delta);
+        e.Handled = true;
     }
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

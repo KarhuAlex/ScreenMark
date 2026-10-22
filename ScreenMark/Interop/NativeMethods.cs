@@ -10,6 +10,7 @@ internal static partial class NativeMethods
     public const uint ModNoRepeat = 0x4000;
 
     public const int GwlExStyle = -20;
+    public const int WsExTransparent = 0x00000020;
     public const int WsExToolWindow = 0x00000080;
 
     public const uint SwpNoSize = 0x0001;
@@ -33,4 +34,7 @@ internal static partial class NativeMethods
 
     [LibraryImport("user32.dll", EntryPoint = "SetWindowLongW")]
     public static partial int SetWindowLong(nint hWnd, int index, int value);
+
+    [LibraryImport("user32.dll")]
+    public static partial uint SendInput(uint count, ReadOnlySpan<Input> inputs, int size);
 }
