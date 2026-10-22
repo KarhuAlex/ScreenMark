@@ -5,8 +5,8 @@ ScreenMark is a small Windows utility for drawing temporary annotations over the
 ## Features
 
 - Global `Ctrl+0` hotkey toggles a transparent drawing overlay
-- Rectangle, ellipse, arrow and freehand tools
-- Red, green and blue stroke colors
+- Rectangle, ellipse, arrow, freehand and text tools
+- Red, green and blue colors
 - Undo, redo and clear
 - The mouse wheel scrolls the window under the cursor without closing the overlay
 - One overlay per monitor, including monitors at negative coordinates and with different DPI scaling
@@ -31,7 +31,7 @@ ScreenMark starts in the tray. Press `Ctrl+0` to begin drawing and use **Exit** 
 ## Usage
 
 1. Press `Ctrl+0`. The overlay appears with the rectangle tool and the red color selected.
-2. Drag to draw. Drag in any direction.
+2. Drag to draw. Drag in any direction. With the text tool, click where the text should go and type.
 3. Start your screenshot tool (for example `Win+Shift+S`) and capture the marked area.
 4. Press `Ctrl+0` or click the close button on the toolbar. All annotations are removed.
 
@@ -43,7 +43,9 @@ The toolbar can be moved by dragging its background if it covers the area you wa
 |---|---|
 | `Ctrl+0` | Show or hide the overlay |
 | Mouse wheel | Scroll the window under the cursor |
-| `Esc` | Cancel the annotation being drawn, or close the overlay |
+| `Esc` | Cancel the annotation or text being drawn, or close the overlay |
+| `Enter` | Place the text being typed |
+| `Shift+Enter` | Start a new line in the text |
 | `Ctrl+Z` | Undo the last annotation |
 | `Ctrl+Y` | Redo the last undone annotation |
 
@@ -51,7 +53,8 @@ The toolbar can be moved by dragging its background if it covers the area you wa
 
 - The hotkey is fixed. If another application already uses `Ctrl+0`, ScreenMark reports this and exits.
 - While the overlay is shown it receives all mouse input. Close it to interact with the applications underneath.
-- Shapes are outlines only. There is no text, fill, eraser, saving or loading.
+- Shapes are outlines only. There is no fill, eraser, saving or loading.
+- Text uses a fixed font (Segoe UI) and size and cannot be edited after it is placed. Undo it and type it again.
 - The toolbar is part of the screen, so it appears in a capture that includes it.
 - Monitors with different DPI scaling are handled in code but have not been tested on such a setup.
 

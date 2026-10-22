@@ -136,6 +136,9 @@
                 <RadioButton Style="{StaticResource ToolToggle}" Tag="{x:Static draw:DrawingTool.Freehand}" ToolTip="Freehand" GroupName="Tool">
                     <Path Style="{StaticResource IconPath}" Data="M2,11 C3.5,4 6,3 8,7.5 S12,13 14,5" />
                 </RadioButton>
+                <RadioButton Style="{StaticResource ToolToggle}" Tag="{x:Static draw:DrawingTool.Text}" ToolTip="Text" GroupName="Tool">
+                    <Path Style="{StaticResource IconPath}" Data="M3,3.5 H13 M8,3.5 V13 M6,13 H10" />
+                </RadioButton>
             </StackPanel>
 
             <Rectangle Style="{StaticResource Separator}" />

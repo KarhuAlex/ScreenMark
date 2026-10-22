@@ -17,10 +17,10 @@ public class AnnotationTests
     [Fact]
     public void Begin_AppliesColorAndThickness() => StaThread.Run(() =>
     {
-        var annotation = Annotation.Begin(DrawingTool.Rectangle, new Point(0, 0), Palette.Blue, 5);
+        var shape = (Shape)Annotation.Begin(DrawingTool.Rectangle, new Point(0, 0), Palette.Blue, 5).Visual;
 
-        Assert.Equal(Palette.Blue, ((SolidColorBrush)annotation.Visual.Stroke).Color);
-        Assert.Equal(5, annotation.Visual.StrokeThickness);
+        Assert.Equal(Palette.Blue, ((SolidColorBrush)shape.Stroke).Color);
+        Assert.Equal(5, shape.StrokeThickness);
     });
 
     [Fact]
@@ -68,6 +68,38 @@ public class AnnotationTests
 
         Assert.True(annotation.IsSignificant);
     });
+
+    [Fact]
+    public void Begin_RejectsTextTool() => StaThread.Run(() =>
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => Annotation.Begin(DrawingTool.Text, new Point(0, 0), Palette.Red, 3)));
+
+    [Fact]
+    public void CreateText_UsesGivenTextColorAndPosition() => StaThread.Run(() =>
+    {
+        var annotation = Annotation.CreateText(new Point(40, 25), "Label", Palette.Green);
+        var block = (TextBlock)annotation.Visual;
+
+        Assert.Equal("Label", block.Text);
+        Assert.Equal(Palette.Green, ((SolidColorBrush)block.Foreground).Color);
+        Assert.Equal(40, Canvas.GetLeft(block));
+        Assert.Equal(25, Canvas.GetTop(block));
+    });
+
+    [Fact]
+    public void CreateText_AppliesSharedTextStyle() => StaThread.Run(() =>
+    {
+        var block = (TextBlock)Annotation.CreateText(new Point(0, 0), "Label", Palette.Red).Visual;
+
+        Assert.Equal(TextStyle.Family, block.FontFamily);
+        Assert.Equal(TextStyle.Size, block.FontSize);
+        Assert.Equal(TextStyle.Weight, block.FontWeight);
+        Assert.Equal(new Thickness(TextStyle.Inset), block.Padding);
+    });
+
+    [Fact]
+    public void IsSignificant_IsTrueForTextWithoutDragging() => StaThread.Run(() =>
+        Assert.True(Annotation.CreateText(new Point(5, 5), "Label", Palette.Red).IsSignificant));
 
     private static void AssertBoundsAreNormalized(DrawingTool tool) => StaThread.Run(() =>
     {

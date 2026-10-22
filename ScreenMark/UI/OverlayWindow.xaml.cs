@@ -10,6 +10,7 @@ internal sealed partial class OverlayWindow : Window
     private readonly DrawingState state;
     private readonly System.Drawing.Rectangle screenBounds;
     private readonly WheelForwarder wheelForwarder;
+    private readonly TextEditor textEditor;
     private Annotation? current;
 
     public OverlayWindow(DrawingState state, System.Drawing.Rectangle screenBounds)
@@ -18,9 +19,13 @@ internal sealed partial class OverlayWindow : Window
         this.screenBounds = screenBounds;
         wheelForwarder = new WheelForwarder(this);
         InitializeComponent();
+        textEditor = new TextEditor(Surface);
+        textEditor.Completed += OnTextCompleted;
     }
 
     public event EventHandler<Annotation>? AnnotationCompleted;
+
+    public bool IsEditingText => textEditor.IsActive;
 
     public void Add(Annotation annotation) => Surface.Children.Add(annotation.Visual);
 
@@ -29,6 +34,7 @@ internal sealed partial class OverlayWindow : Window
     public void Clear()
     {
         CancelCurrent();
+        textEditor.Cancel();
         Surface.Children.Clear();
     }
 
@@ -52,7 +58,15 @@ internal sealed partial class OverlayWindow : Window
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        textEditor.Commit();
+
         var origin = e.GetPosition(Surface);
+        if (state.Tool == DrawingTool.Text)
+        {
+            textEditor.Begin(origin, state.Color);
+            return;
+        }
+
         current = Annotation.Begin(state.Tool, origin, state.Color, DrawingState.StrokeThickness);
         Add(current);
         Surface.CaptureMouse();
@@ -79,6 +93,12 @@ internal sealed partial class OverlayWindow : Window
         {
             Remove(annotation);
         }
+    }
+
+    private void OnTextCompleted(object? sender, Annotation annotation)
+    {
+        Add(annotation);
+        AnnotationCompleted?.Invoke(this, annotation);
     }
 
     private void OnLostMouseCapture(object sender, MouseEventArgs e) => CancelCurrent();

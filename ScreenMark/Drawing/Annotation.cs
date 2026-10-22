@@ -7,13 +7,13 @@ namespace ScreenMark.Drawing;
 
 internal sealed class Annotation
 {
-    private const double minimumExtent = 3;
+    private const double MinimumExtent = 3;
 
     private readonly DrawingTool tool;
     private readonly Point origin;
     private Rect extent;
 
-    private Annotation(DrawingTool tool, Point origin, Shape visual)
+    private Annotation(DrawingTool tool, Point origin, FrameworkElement visual)
     {
         this.tool = tool;
         this.origin = origin;
@@ -21,15 +21,13 @@ internal sealed class Annotation
         Visual = visual;
     }
 
-    public Shape Visual { get; }
+    public FrameworkElement Visual { get; }
 
-    public bool IsSignificant => extent.Width >= minimumExtent || extent.Height >= minimumExtent;
+    public bool IsSignificant =>
+        tool == DrawingTool.Text || extent.Width >= MinimumExtent || extent.Height >= MinimumExtent;
 
     public static Annotation Begin(DrawingTool tool, Point origin, Color color, double thickness)
     {
-        var stroke = new SolidColorBrush(color);
-        stroke.Freeze();
-
         Shape visual = tool switch
         {
             DrawingTool.Rectangle => new Rectangle(),
@@ -39,13 +37,31 @@ internal sealed class Annotation
             _ => throw new ArgumentOutOfRangeException(nameof(tool)),
         };
 
-        visual.Stroke = stroke;
+        visual.Stroke = color.ToFrozenBrush();
         visual.StrokeThickness = thickness;
         visual.StrokeStartLineCap = PenLineCap.Round;
         visual.StrokeEndLineCap = PenLineCap.Round;
         visual.StrokeLineJoin = tool == DrawingTool.Rectangle ? PenLineJoin.Miter : PenLineJoin.Round;
 
         return new Annotation(tool, origin, visual);
+    }
+
+    public static Annotation CreateText(Point origin, string text, Color color)
+    {
+        var visual = new TextBlock
+        {
+            Text = text,
+            Foreground = color.ToFrozenBrush(),
+            FontFamily = TextStyle.Family,
+            FontSize = TextStyle.Size,
+            FontWeight = TextStyle.Weight,
+            Padding = new Thickness(TextStyle.Inset),
+        };
+
+        Canvas.SetLeft(visual, origin.X);
+        Canvas.SetTop(visual, origin.Y);
+
+        return new Annotation(DrawingTool.Text, origin, visual);
     }
 
     public void Extend(Point point)

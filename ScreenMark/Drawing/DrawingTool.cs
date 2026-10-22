@@ -6,4 +6,5 @@ internal enum DrawingTool
     Ellipse,
     Arrow,
     Freehand,
+    Text,
 }

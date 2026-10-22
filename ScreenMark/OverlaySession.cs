@@ -74,6 +74,11 @@ internal sealed class OverlaySession : IDisposable
 
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
     {
+        if (overlays.Any(overlay => overlay.IsEditingText))
+        {
+            return;
+        }
+
         switch (e.Key, Keyboard.Modifiers)
         {
             case (Key.Escape, ModifierKeys.None):
