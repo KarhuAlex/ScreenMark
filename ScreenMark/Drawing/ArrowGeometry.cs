@@ -5,8 +5,8 @@ namespace ScreenMark.Drawing;
 
 internal static class ArrowGeometry
 {
-    private const double headLength = 16;
-    private const double headHalfAngleDegrees = 25;
+    private const double HeadLength = 16;
+    private const double HeadHalfAngleDegrees = 25;
 
     public static Geometry Create(Point start, Point end)
     {
@@ -34,12 +34,12 @@ internal static class ArrowGeometry
     public static (Point Left, Point Right) GetHeadWingTips(Point start, Point end)
     {
         var backward = start - end;
-        var headLength = Math.Min(ArrowGeometry.headLength, backward.Length / 2);
+        var headLength = Math.Min(HeadLength, backward.Length / 2);
         backward.Normalize();
 
         return (
-            end + (Rotate(backward, headHalfAngleDegrees) * headLength),
-            end + (Rotate(backward, -headHalfAngleDegrees) * headLength));
+            end + (Rotate(backward, HeadHalfAngleDegrees) * headLength),
+            end + (Rotate(backward, -HeadHalfAngleDegrees) * headLength));
     }
 
     private static Vector Rotate(Vector vector, double degrees)

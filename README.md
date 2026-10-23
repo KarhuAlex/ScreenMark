@@ -8,7 +8,7 @@ ScreenMark is a small Windows utility for drawing temporary annotations over the
 
 ## Features
 
-- Global `Ctrl+0` hotkey toggles a transparent drawing overlay
+- Global hotkey (`Ctrl+0` by default, configurable) toggles a transparent drawing overlay
 - Rectangle, ellipse, arrow, freehand and text tools
 - Red, green and blue colors
 - Undo, redo and clear
@@ -35,22 +35,28 @@ dotnet run --project ScreenMark
 dotnet test
 ```
 
-ScreenMark starts in the tray. Press `Ctrl+0` to begin drawing and use **Exit** in the tray menu to quit.
+ScreenMark starts in the tray. Press the hotkey (`Ctrl+0` by default) to begin drawing and use **Exit** in the tray menu to quit.
 
 ## Usage
 
-1. Press `Ctrl+0`. The overlay appears with the rectangle tool and the red color selected.
+1. Press the hotkey. The overlay appears with the rectangle tool and the red color selected.
 2. Drag to draw. Drag in any direction. With the text tool, click where the text should go and type.
 3. Start your screenshot tool (for example `Win+Shift+S`) and capture the marked area.
-4. Press `Ctrl+0` or click the close button on the toolbar. All annotations are removed.
+4. Press the hotkey again, press `Esc` or click the close button on the toolbar. All annotations are removed.
 
 The toolbar can be moved by dragging its background.
+
+## Changing the hotkey
+
+Right-click the tray icon, choose **Change hotkey…**, press the new shortcut and click **Save**. A shortcut needs Ctrl, Alt or Win plus another key. If another application already uses it, ScreenMark says so and keeps the current one. The choice is stored in `%AppData%\ScreenMark\settings.json`.
+
+If the saved hotkey is taken by another application at startup, ScreenMark asks for a new one instead of starting without it.
 
 ## Keyboard shortcuts
 
 | Shortcut | Action |
 |---|---|
-| `Ctrl+0` | Show or hide the overlay |
+| `Ctrl+0` (default) | Show or hide the overlay |
 | Mouse wheel | Scroll the window under the cursor |
 | `Esc` | Cancel the annotation or text being drawn, or close the overlay |
 | `Enter` | Place the text being typed |
@@ -60,7 +66,6 @@ The toolbar can be moved by dragging its background.
 
 ## Limitations
 
-- The hotkey is fixed. If another application already uses `Ctrl+0`, ScreenMark reports this and exits.
 - While the overlay is shown it receives all mouse input. Close it to interact with the applications underneath.
 - Shapes are outlines only. There is no fill, eraser, saving or loading.
 - Text uses a fixed font (Segoe UI) and size and cannot be edited after it is placed. Undo it and type it again.

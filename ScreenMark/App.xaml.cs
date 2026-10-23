@@ -1,5 +1,5 @@
 using System.Windows;
-using System.Windows.Input;
+using ScreenMark.UI;
 
 namespace ScreenMark;
 
@@ -8,14 +8,16 @@ internal sealed partial class App : Application, IDisposable
     private const string InstanceMutexName = @"Local\ScreenMark";
 
     private readonly OverlaySession session = new();
-    private HotkeyService? hotkey;
+    private readonly HotkeyService hotkeyService = new();
+    private readonly SettingsStore settings = new(SettingsStore.DefaultPath);
     private TrayIcon? trayIcon;
     private Mutex? instanceMutex;
+    private bool isChoosingHotkey;
 
     public void Dispose()
     {
         trayIcon?.Dispose();
-        hotkey?.Dispose();
+        hotkeyService.Dispose();
         session.Dispose();
         instanceMutex?.ReleaseMutex();
         instanceMutex?.Dispose();
@@ -34,25 +36,54 @@ internal sealed partial class App : Application, IDisposable
             return;
         }
 
-        hotkey = new HotkeyService(ModifierKeys.Control, Key.D0);
-        if (!hotkey.TryRegister())
-        {
-            MessageBox.Show(
-                "Ctrl+0 is already in use by another application.",
-                "ScreenMark",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-            Shutdown(1);
-            return;
-        }
+        var tray = new TrayIcon(() => ChooseHotkey(message: null), Shutdown);
+        trayIcon = tray;
+        hotkeyService.Changed += (_, hotkey) => tray.SetText($"ScreenMark ({hotkey})");
+        hotkeyService.Pressed += OnHotkeyPressed;
 
-        hotkey.Pressed += (_, _) => session.Toggle();
-        trayIcon = new TrayIcon("ScreenMark (Ctrl+0)", Shutdown);
+        var configured = settings.LoadHotkey();
+        if (!hotkeyService.TryRegister(configured)
+            && !ChooseHotkey($"{configured} is already in use by another application."))
+        {
+            Shutdown(1);
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
         Dispose();
         base.OnExit(e);
+    }
+
+    private void OnHotkeyPressed(object? sender, EventArgs e)
+    {
+        if (!isChoosingHotkey)
+        {
+            session.Toggle();
+        }
+    }
+
+    private bool ChooseHotkey(string? message)
+    {
+        isChoosingHotkey = true;
+        try
+        {
+            return new HotkeyDialog(TryApplyHotkey, message).ShowDialog() == true;
+        }
+        finally
+        {
+            isChoosingHotkey = false;
+        }
+    }
+
+    private bool TryApplyHotkey(Hotkey hotkey)
+    {
+        if (!hotkeyService.TryRegister(hotkey))
+        {
+            return false;
+        }
+
+        settings.SaveHotkey(hotkey);
+        return true;
     }
 }

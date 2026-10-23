@@ -6,51 +6,72 @@ namespace ScreenMark;
 
 internal sealed class HotkeyService : IDisposable
 {
-    private const int hotkeyId = 1;
-    private static readonly nint messageOnlyParent = new(-3);
+    private const int HotkeyId = 1;
+    private static readonly nint MessageOnlyParent = new(-3);
 
-    private readonly ModifierKeys modifiers;
-    private readonly Key key;
     private readonly HwndSource messageWindow;
-    private bool isRegistered;
+    private Hotkey? registered;
 
-    public HotkeyService(ModifierKeys modifiers, Key key)
+    public HotkeyService()
     {
-        this.modifiers = modifiers;
-        this.key = key;
-
-        messageWindow = new HwndSource(new HwndSourceParameters("ScreenMark.Hotkey") { ParentWindow = messageOnlyParent });
+        messageWindow = new HwndSource(new HwndSourceParameters("ScreenMark.Hotkey") { ParentWindow = MessageOnlyParent });
         messageWindow.AddHook(OnMessage);
     }
 
     public event EventHandler? Pressed;
 
-    // Fails when another application already owns the key combination.
-    public bool TryRegister()
-    {
-        isRegistered = NativeMethods.RegisterHotKey(
-            messageWindow.Handle,
-            hotkeyId,
-            (uint)modifiers | NativeMethods.ModNoRepeat,
-            (uint)KeyInterop.VirtualKeyFromKey(key));
+    public event EventHandler<Hotkey>? Changed;
 
-        return isRegistered;
+    public bool TryRegister(Hotkey hotkey)
+    {
+        var previous = registered;
+        Unregister();
+
+        if (Register(hotkey))
+        {
+            Changed?.Invoke(this, hotkey);
+            return true;
+        }
+
+        if (previous is { } restored)
+        {
+            _ = Register(restored);
+        }
+
+        return false;
     }
 
     public void Dispose()
     {
-        if (isRegistered)
-        {
-            _ = NativeMethods.UnregisterHotKey(messageWindow.Handle, hotkeyId);
-        }
-
+        Unregister();
         messageWindow.RemoveHook(OnMessage);
         messageWindow.Dispose();
     }
 
+    private bool Register(Hotkey hotkey)
+    {
+        var succeeded = NativeMethods.RegisterHotKey(
+            messageWindow.Handle,
+            HotkeyId,
+            (uint)hotkey.Modifiers | NativeMethods.ModNoRepeat,
+            (uint)KeyInterop.VirtualKeyFromKey(hotkey.Key));
+
+        registered = succeeded ? hotkey : null;
+        return succeeded;
+    }
+
+    private void Unregister()
+    {
+        if (registered is not null)
+        {
+            _ = NativeMethods.UnregisterHotKey(messageWindow.Handle, HotkeyId);
+            registered = null;
+        }
+    }
+
     private nint OnMessage(nint hwnd, int message, nint wParam, nint lParam, ref bool handled)
     {
-        if (message == NativeMethods.WmHotkey && wParam == hotkeyId)
+        if (message == NativeMethods.WmHotkey && wParam == HotkeyId)
         {
             Pressed?.Invoke(this, EventArgs.Empty);
             handled = true;

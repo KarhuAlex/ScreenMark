@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2026-10-23
+
+- The global hotkey can be changed from the tray menu and is remembered between runs
+- If the hotkey is already taken at startup, ScreenMark asks for another one instead of exiting
+
 ## 0.1.1 - 2026-10-23
 
 - The toolbar is excluded from screenshots and screen recordings; this needs Windows 10 version 2004 or later
