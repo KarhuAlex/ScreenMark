@@ -1,6 +1,7 @@
 # ScreenMark
 
 [![CI](https://github.com/KarhuAlex/ScreenMark/actions/workflows/ci.yml/badge.svg)](https://github.com/KarhuAlex/ScreenMark/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 <img width="874" height="448" alt="Preview" src="https://github.com/user-attachments/assets/4ba685d2-3513-4595-a2b2-c13b25c5435f" />
 
