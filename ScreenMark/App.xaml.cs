@@ -36,7 +36,7 @@ internal sealed partial class App : Application, IDisposable
             return;
         }
 
-        var tray = new TrayIcon(() => ChooseHotkey(message: null), Shutdown);
+        var tray = new TrayIcon(new StartupRegistration(), () => ChooseHotkey(message: null), Shutdown);
         trayIcon = tray;
         hotkeyService.Changed += (_, hotkey) => tray.SetText($"ScreenMark ({hotkey})");
         hotkeyService.Pressed += OnHotkeyPressed;

@@ -17,6 +17,7 @@ ScreenMark is a small Windows utility for drawing temporary annotations over the
 - Annotations stay on screen while a screenshot tool runs and are discarded when the overlay closes
 - The toolbar is excluded from screenshots, screen recordings and screen sharing
 - Runs from the system tray; only one instance can run at a time
+- Optional start with Windows, switched on or off from the tray menu
 
 ## Requirements
 
@@ -51,6 +52,10 @@ The toolbar can be moved by dragging its background.
 Right-click the tray icon, choose **Change hotkey…**, press the new shortcut and click **Save**. A shortcut needs Ctrl, Alt or Win plus another key. If another application already uses it, ScreenMark says so and keeps the current one. The choice is stored in `%AppData%\ScreenMark\settings.json`.
 
 If the saved hotkey is taken by another application at startup, ScreenMark asks for a new one instead of starting without it.
+
+## Start with Windows
+
+Tick **Start with Windows** in the tray menu to launch ScreenMark at sign-in. This adds a per-user entry under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`, and unticking removes it. The entry points at the current location of `ScreenMark.exe`, so tick it again after moving the file.
 
 ## Keyboard shortcuts
 
