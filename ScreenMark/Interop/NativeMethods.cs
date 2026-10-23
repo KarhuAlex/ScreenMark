@@ -17,6 +17,8 @@ internal static partial class NativeMethods
     public const uint SwpNoZOrder = 0x0004;
     public const uint SwpNoActivate = 0x0010;
 
+    public const uint WdaExcludeFromCapture = 0x00000011;
+
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool RegisterHotKey(nint hWnd, int id, uint modifiers, uint virtualKey);
@@ -37,4 +39,8 @@ internal static partial class NativeMethods
 
     [LibraryImport("user32.dll")]
     public static partial uint SendInput(uint count, ReadOnlySpan<Input> inputs, int size);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetWindowDisplayAffinity(nint hWnd, uint affinity);
 }

@@ -35,6 +35,12 @@ internal static class WindowPlacement
         _ = NativeMethods.SetWindowLong(handle, NativeMethods.GwlExStyle, style | NativeMethods.WsExToolWindow);
     }
 
+    public static bool ExcludeFromCapture(Window window)
+    {
+        var handle = new WindowInteropHelper(window).EnsureHandle();
+        return NativeMethods.SetWindowDisplayAffinity(handle, NativeMethods.WdaExcludeFromCapture);
+    }
+
     private static void SetBounds(nint handle, Rectangle bounds) =>
         NativeMethods.SetWindowPos(
             handle,

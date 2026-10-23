@@ -15,11 +15,12 @@ ScreenMark is a small Windows utility for drawing temporary annotations over the
 - The mouse wheel scrolls the window under the cursor without closing the overlay
 - One overlay per monitor, including monitors at negative coordinates and with different DPI scaling
 - Annotations stay on screen while a screenshot tool runs and are discarded when the overlay closes
+- The toolbar is excluded from screenshots, screen recordings and screen sharing
 - Runs from the system tray; only one instance can run at a time
 
 ## Requirements
 
-- Windows 10 (version 1703) or later
+- Windows 10 (version 2004) or later
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) to build, .NET 10 Desktop Runtime to run
 
 ## Download
@@ -43,7 +44,7 @@ ScreenMark starts in the tray. Press `Ctrl+0` to begin drawing and use **Exit** 
 3. Start your screenshot tool (for example `Win+Shift+S`) and capture the marked area.
 4. Press `Ctrl+0` or click the close button on the toolbar. All annotations are removed.
 
-The toolbar can be moved by dragging its background if it covers the area you want to capture.
+The toolbar can be moved by dragging its background.
 
 ## Keyboard shortcuts
 
@@ -63,7 +64,6 @@ The toolbar can be moved by dragging its background if it covers the area you wa
 - While the overlay is shown it receives all mouse input. Close it to interact with the applications underneath.
 - Shapes are outlines only. There is no fill, eraser, saving or loading.
 - Text uses a fixed font (Segoe UI) and size and cannot be edited after it is placed. Undo it and type it again.
-- The toolbar is part of the screen, so it appears in a capture that includes it.
 - Monitors with different DPI scaling are handled in code but have not been tested on such a setup.
 
 ## License

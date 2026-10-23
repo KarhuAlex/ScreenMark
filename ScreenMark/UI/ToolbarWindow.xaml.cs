@@ -42,6 +42,8 @@ internal sealed partial class ToolbarWindow : Window
 
     private void OnSourceInitialized(object? sender, EventArgs e)
     {
+        _ = WindowPlacement.ExcludeFromCapture(this);
+
         Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
         var dpi = VisualTreeHelper.GetDpi(this);
         var widthInPixels = (int)Math.Ceiling(DesiredSize.Width * dpi.DpiScaleX);
