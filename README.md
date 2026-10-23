@@ -5,7 +5,7 @@
 
 <img width="874" height="448" alt="Preview" src="https://github.com/user-attachments/assets/4ba685d2-3513-4595-a2b2-c13b25c5435f" />
 
-ScreenMark is a small Windows utility for drawing temporary annotations over the desktop and other applications. It is meant for marking up an interface right before you capture it with a screenshot tool such as the Windows Snipping Tool. ScreenMark does not capture, save or edit images itself.
+ScreenMark is a small Windows utility for drawing temporary annotations over the desktop and other applications. Use it to mark up an interface before taking a screenshot, to point things out while presenting, or to highlight steps in a screen recording. Annotations disappear when you close the overlay.
 
 ## Features
 
